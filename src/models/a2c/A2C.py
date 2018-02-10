@@ -33,13 +33,13 @@ def init_weights(m):
 class A2C(torch.nn.Module):
     def __init__(self, num_inputs, num_actions):
         super(A2C, self).__init__()
-        self.conv1 = nn.Conv2d(num_inputs, 32, 3, stride=2, padding=1)
-        self.conv2 = nn.Conv2d(32, 32, 3, stride=2, padding=1)
-        self.conv3 = nn.Conv2d(32, 64, 3, stride=2, padding=1)
-        self.conv4 = nn.Conv2d(64, 32, 3, stride=2, padding=1)
+        self.conv1 = nn.Conv2d(num_inputs, 64, 8, stride=2, padding=1)
+        self.conv2 = nn.Conv2d(64, 64, 5, stride=2, padding=1)
+        self.conv3 = nn.Conv2d(64, 64, 3, stride=2, padding=1)
+        self.conv4 = nn.Conv2d(64, 64, 3, stride=2, padding=1)
 
         self.lstm_size = 512
-        self.lstm = nn.LSTMCell(38400, self.lstm_size)
+        self.lstm = nn.LSTMCell(19200, self.lstm_size)
 
         num_outputs = num_actions # getting the number of possible actions
         self.critic_linear = nn.Linear(self.lstm_size, 1) # full connection of the critic: output = V(S)

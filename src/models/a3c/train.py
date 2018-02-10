@@ -3,8 +3,8 @@
 import torch
 import torch.nn.functional as F
 from torch.autograd import Variable
-from a3c.A3C import A3C
-from doom_trainer import DoomTrainer
+from models.a3c.A3C import A3C
+from doom.doom_trainer import DoomTrainer
 
 
 # Implementing a function to make sure the models share the same gradient

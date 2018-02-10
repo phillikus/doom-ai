@@ -35,10 +35,10 @@ def init_weights(m):
 class A3C(torch.nn.Module):
     def __init__(self, num_inputs, num_actions):
         super(A3C, self).__init__()
-        self.conv1 = nn.Conv2d(num_inputs, 32, 3, stride=2, padding=1)
-        self.conv2 = nn.Conv2d(32, 32, 3, stride=2, padding=1)
-        self.conv3 = nn.Conv2d(32, 32, 3, stride=2, padding=1)
-        self.conv4 = nn.Conv2d(32, 32, 3, stride=2, padding=1)
+        self.conv1 = nn.Conv2d(num_inputs, 64, 3, stride=2, padding=1)
+        self.conv2 = nn.Conv2d(64, 64, 3, stride=2, padding=1)
+        self.conv3 = nn.Conv2d(64, 64, 3, stride=2, padding=1)
+        self.conv4 = nn.Conv2d(64, 32, 3, stride=2, padding=1)
 
         self.lstm_size = 256
         self.lstm = nn.LSTMCell(9600, self.lstm_size)

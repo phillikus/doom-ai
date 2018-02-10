@@ -1,7 +1,8 @@
 import torch
 import torch.nn.functional as F
 from torch.autograd import Variable
-from a2c.A2C import A2C
+from models.a2c.A2C import A2C
+from doom.doom_trainer import DoomTrainer
 
 torch.set_default_tensor_type('torch.cuda.FloatTensor')
 
@@ -62,7 +63,7 @@ def train(params, trainer, model, optimizer=None):
                 break
 
         R = torch.zeros(1, 1)
-        if not done: # if we are not done:
+        if not done:
             value, _, _ = model((Variable(state.unsqueeze(0)).cuda(), (hx, cx)))
             R = value.data
 

@@ -1,11 +1,12 @@
 # Test Agent
+from collections import deque
 
 import torch
 import torch.nn.functional as F
-from a3c.A3C import A3C
+from models.a3c.A3C import A3C
 from torch.autograd import Variable
 import time
-from doom_trainer import DoomTrainer
+from doom.doom_trainer import DoomTrainer
 
 
 torch.set_default_tensor_type('torch.cuda.FloatTensor')
@@ -30,6 +31,7 @@ def test(rank, params, shared_model):
     start_time = time.time() # getting the starting time to measure the computation time
 
     episode_length = 0 # initializing the episode length to 0
+    actions = deque(maxlen=100)
 
     while True: # repeat
         episode_length += 1 # incrementing the episode length by one
@@ -47,10 +49,15 @@ def test(rank, params, shared_model):
         reward, done = trainer.make_action(action[0])
         reward_sum += reward
 
+        actions.append(action[0])
+        if actions.count(actions[0]) == actions.maxlen:
+            done = True
+
         if done: # printing the results at the end of each part
             print("Time {}, episode reward {}, episode length {}".format(time.strftime("%Hh %Mm %Ss", time.gmtime(time.time() - start_time)), reward_sum, episode_length))
             reward_sum = 0 # reinitializing the sum of rewards
             episode_length = 0 # reinitializing the episode length
+            actions.clear()
             trainer.new_episode() # reinitializing the environment
-            time.sleep(3) # doing a one minute break to let the other agents practice (if the game is done)
+            time.sleep(60) # doing a one minute break to let the other agents practice (if the game is done)
         state = trainer.get_screen()

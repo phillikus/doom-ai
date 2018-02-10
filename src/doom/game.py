@@ -55,10 +55,10 @@ def play_a2c(params):
 
 def play_a3c(params):
     os.environ['OMP_NUM_THREADS'] = '1'
-    shared_model = A3C(1, params.num_actions).cuda()  # shared_model is the model shared by the different agents (different threads in different cores)
+    shared_model = A3C(1, params.num_actions).cuda()
     shared_model.share_memory()
 
-    optimizer = optimizers.SharedAdam(shared_model.parameters(), lr=params.lr)  # the optimizer is also shared because it acts on the shared model
+    optimizer = optimizers.SharedAdam(shared_model.parameters(), lr=params.lr)
     optimizer.share_memory()
 
     processes = []
@@ -66,12 +66,12 @@ def play_a3c(params):
     process = mp.Process(target=test_a3c, args=(params.num_processes, params, shared_model))
     process.start()
 
-    for rank in range(0, params.num_processes):  # making a loop to run all the other processes that will be trained by updating the shared model
+    for rank in range(0, params.num_processes):
         process = mp.Process(target=train_a3c, args=(rank, params, shared_model, optimizer))
         process.start()
         processes.append(process)
 
-    for p in processes:  # creating a pointer that will allow to kill all the threads when at least one of the threads, or main.py will be killed, allowing to stop the program safely
+    for p in processes:
         p.join()
 
 
@@ -83,6 +83,6 @@ def play_dqn(params):
     softmax_body = SoftmaxBody(T=1)
     ai = AI(brain=model, body=softmax_body)
 
-    n_steps = NStepProgress(trainer, ai, n_step=5)
+    n_steps = NStepProgress(trainer, ai, n_step=10)
     memory = ReplayMemory(n_steps=n_steps, capacity=10000)
     train_dqn(model, memory, n_steps)

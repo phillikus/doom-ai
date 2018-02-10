@@ -9,10 +9,10 @@ from torch.autograd import Variable
 class DQN(nn.Module):
     def __init__(self, number_actions):
         super(DQN, self).__init__()
-        self.convolution1 = nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3)
+        self.convolution1 = nn.Conv2d(in_channels=1, out_channels=32, kernel_size=5)
         self.convolution2 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3)
         self.convolution3 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3)
-        self.convolution4 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3)
+        self.convolution4 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=2)
         self.fc1 = nn.Linear(in_features=self.count_neurons((1, 320, 240)), out_features=40)
         self.fc2 = nn.Linear(in_features=40, out_features=40)
         self.fc3 = nn.Linear(in_features=40, out_features=number_actions)

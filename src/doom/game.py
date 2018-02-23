@@ -40,7 +40,7 @@ def play(parameters):
 def play_a2c(params):
     trainer = DoomTrainer(params)
     trainer.start_game()
-    model = A2C(1, params.num_actions).cuda()
+    model = A2C(1, trainer.num_actions).cuda()
     optimizer = torch.optim.Adam(model.parameters(), lr=params.lr)
 
     counter = 0
@@ -79,7 +79,7 @@ def play_dqn(params):
     trainer = DoomTrainer(params)
     trainer.start_game()
 
-    model = DQN(params.num_actions)
+    model = DQN(trainer.num_actions())
     softmax_body = SoftmaxBody(T=1)
     ai = AI(brain=model, body=softmax_body)
 

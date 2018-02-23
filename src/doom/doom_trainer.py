@@ -3,16 +3,33 @@ from utils.image_preprocessing import scale
 from vizdoom.vizdoom import DoomGame
 
 
-def create_actions():
-    move_left =    [1, 0, 0, 0, 0, 0, 0]
-    move_right =   [0, 1, 0, 0, 0, 0, 0]
-    shoot =        [0, 0, 1, 0, 0, 0 ,0]
-    back =         [0, 0, 0, 1, 0, 0 ,0]
-    forward =      [0, 0, 0, 0, 1, 0, 0]
-    turn_left =    [0, 0, 0, 0, 0, 1, 0]
-    turn_right =   [0, 0, 0, 0, 0, 0, 1]
+def create_actions(scenario):
+    if scenario == 'basic':
+        move_left = [1, 0, 0]
+        move_right = [0, 1, 0]
+        shoot = [0, 0, 1]
 
-    return [move_left, move_right, shoot, back, forward, turn_left, turn_right]
+        return [move_left, move_right, shoot]
+
+    if scenario == 'deadly_corridor':
+        move_left =    [1, 0, 0, 0, 0, 0, 0]
+        move_right =   [0, 1, 0, 0, 0, 0, 0]
+        shoot =        [0, 0, 1, 0, 0, 0 ,0]
+        back =         [0, 0, 0, 1, 0, 0 ,0]
+        forward =      [0, 0, 0, 0, 1, 0, 0]
+        turn_left =    [0, 0, 0, 0, 0, 1, 0]
+        turn_right =   [0, 0, 0, 0, 0, 0, 1]
+
+        return [move_left, move_right, shoot, back, forward, turn_left, turn_right]
+
+    if scenario == 'my_way_home':
+        turn_left =  [1, 0, 0, 0, 0]
+        turn_right = [0, 1, 0, 0, 0]
+        forward =    [0, 0, 1, 0, 0]
+        move_left =  [0, 0, 0, 1, 0]
+        move_right = [0, 0, 0, 0, 1]
+
+        return [turn_left, turn_right, forward, move_left, move_right]
 
     # speed = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     # strafe = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -43,7 +60,7 @@ class DoomTrainer:
     def __init__(self, params):
         self.game = DoomGame()
         self.game.load_config("../scenarios/" + params.scenario + ".cfg")
-        self.actions = create_actions()
+        self.actions = create_actions(params.scenario)
 
     def start_game(self):
         self.game.init()
@@ -62,3 +79,6 @@ class DoomTrainer:
         done = self.game.is_episode_finished()
 
         return reward, done
+
+    def num_actions(self):
+        return len(self.actions)

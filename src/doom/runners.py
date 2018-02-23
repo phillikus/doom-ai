@@ -1,5 +1,5 @@
-from parameters import Parameters
-from game import play
+from doom.parameters import Parameters
+from doom.game import play
 
 
 def run_basic():

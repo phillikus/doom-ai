@@ -29,7 +29,9 @@ def play(parameters):
     torch.manual_seed(parameters.seed)
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
 
-    if parameters.model == 'a3c':
+    if parameters.model == 'human':
+        play_human(parameters)
+    elif parameters.model == 'a3c':
         play_a3c(parameters)
     elif parameters.model == 'a2c':
         play_a2c(parameters)
@@ -37,10 +39,16 @@ def play(parameters):
         play_dqn(parameters)
 
 
+def play_human(params):
+    trainer = DoomTrainer(params)
+    trainer.start_game()
+    trainer.play_human()
+
+
 def play_a2c(params):
     trainer = DoomTrainer(params)
     trainer.start_game()
-    model = A2C(1, trainer.num_actions).cuda()
+    model = A2C(1, params.num_actions).cuda()
     optimizer = torch.optim.Adam(model.parameters(), lr=params.lr)
 
     counter = 0
@@ -54,8 +62,9 @@ def play_a2c(params):
 
 
 def play_a3c(params):
+    trainer = DoomTrainer(params)
     os.environ['OMP_NUM_THREADS'] = '1'
-    shared_model = A3C(1, params.num_actions).cuda()
+    shared_model = A3C(1, trainer.num_actions()).cuda()
     shared_model.share_memory()
 
     optimizer = optimizers.SharedAdam(shared_model.parameters(), lr=params.lr)

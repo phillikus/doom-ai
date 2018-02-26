@@ -12,7 +12,7 @@ def parse_arguments():
     parser.add_argument("--num_processes", type=int, default=6, help="Number of processes for parallel algorithms")
     parser.add_argument("--num_steps", type=int, default=20, help="Steps for training")
     parser.add_argument("--max_episode_length", type=int, default=10000, help="Maximum episode length")
-    parser.add_argument("--num_actions", type=int, default=3, help="Number of actions")
+    parser.add_argument("--num_actions", type=int, default=7, help="Number of actions")
     parser.add_argument("--model", type=str, default='dqn', help="Model to use for training the AI")
     parser.add_argument("--num_updates", type=int, default=100, help="Number of updates")
 

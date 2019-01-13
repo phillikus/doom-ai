@@ -1,6 +1,0 @@
-- logging class
-- argparser
-- starter classes for each scenario
-- explore further nns
-- calculate ltsm input size
-- auto initialize actions array

@@ -30,7 +30,6 @@ def test(rank, params, shared_model):
     start_time = time.time()
 
     episode_length = 0
-    actions = deque(maxlen=100)
 
     while True:
         episode_length += 1
@@ -48,16 +47,11 @@ def test(rank, params, shared_model):
         reward, done = trainer.make_action(action[0])
         reward_sum += reward
 
-        actions.append(action[0])
-        if actions.count(actions[0]) == actions.maxlen:
-            done = True
-
         if done:
             print("Time {}, episode reward {}, episode length {}".format(time.strftime("%Hh %Mm %Ss", time.gmtime(time.time() - start_time)), reward_sum, episode_length))
             log_reward(reward_sum)
             reward_sum = 0
             episode_length = 0
-            actions.clear()
             trainer.new_episode()
             time.sleep(15)
         state = trainer.get_screen()

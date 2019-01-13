@@ -18,9 +18,21 @@ def show_graph():
 
     plt.figure()
     axes = plt.axes()
+
+    epochs, rewards = avg_rewards(rewards)
     axes.plot(epochs, rewards)
 
     plt.title("Rewards")
     plt.xlabel("Epoch")
     plt.ylabel("Average Reward")
 
+
+def avg_rewards(rewards):
+    epochs = []
+    new_rewards = []
+    for i in range(0, 40):
+        start_index = i*100
+        epochs.append(start_index)
+        new_rewards.append(sum(rewards[start_index: start_index+100]) / 100)
+
+    return epochs, new_rewards
